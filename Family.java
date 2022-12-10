@@ -1,0 +1,3 @@
+interface Family {
+    String getName();
+}

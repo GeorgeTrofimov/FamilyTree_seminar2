@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 public class Main {
     public static void main(String[] args) {
        /* Connection George = new Connection("George", "Men", "I", 22)
@@ -47,126 +46,28 @@ public class Main {
         gt.append2(George,Artyom);
         gt.append2(George,Nikita);
         gt.append4(George,Antonina);
+        class NEWParents extends Research{
+            public NEWParents(FamilyTree3 pd) {
 
-        System.out.println(new Research(gt).spend(George, Relationship.Wife));
-        System.out.println(new Research(gt).spend(George, Relationship.Parents));
-        System.out.println(new Research(gt).spend(George, Relationship.Relatives));
-        System.out.println(new Research(gt).spend(George, Relationship.RelativesInLaw));
-        System.out.println(new Research(gt).spend(George, Relationship.Children));
-    }
-}
+                super(pd);
+            }
 
-enum Relationship {
-    Parents,
-    Children,
-    Relatives,
-    RelativesInLaw,
-    Wife,
-    I,
-}
-
-interface Family {
-    String getName();
-}
-
-class Humanking implements Family {
-
-    private String getname;
-
-    public String getName() {
-        return getname;
-    }
-    public Humanking(String getname) {
-        this.getname = getname;
-    }
-
-    @Override
-    public String toString() {
-        return getName();
-    }
-}
-
-class Work {
-    public Work(Humanking f1, Relationship re, Humanking f2) {
-        this.f1 = f1;
-        this.re = re;
-        this.f2 = f2;
-    }
-
-    Humanking f1;
-    Relationship re;
-    Humanking f2;
-
-    @Override
-    public String toString() {
-        return String.format("<%s %s %s>", f1, re, f2);
-    }
-}
-
-interface FamilyTree3 {
-    void append(Humanking Parents, Humanking Children);
-
-    void append1(Humanking Relatives, Humanking I);
-
-    void append2(Humanking RelativesInLaw, Humanking I);
-
-    void append3(Humanking Wife, Humanking I);
-
-    void append4(Humanking Children, Humanking I);
-
-    ArrayList<Work> getData();
-}
-
-class GeoTree implements FamilyTree3 {
-    private final ArrayList<Work> tree = new ArrayList<>();
-
-    @Override
-    public ArrayList<Work> getData() {
-        return tree;
-    }
-
-    public void append(Humanking Parents, Humanking Children) {
-        tree.add(new Work(Parents, Relationship.Parents, Children));
-        tree.add(new Work(Children, Relationship.Children, Parents));
-    }
-
-
-    public void append1(Humanking Relatives, Humanking I) {
-        tree.add(new Work(Relatives, Relationship.Relatives, I));
-    }
-
-    public void append2(Humanking RelativesInLaw, Humanking I) {
-        tree.add(new Work(RelativesInLaw, Relationship.RelativesInLaw, I));
-    }
-
-    public void append3(Humanking Wife, Humanking I) {
-        tree.add(new Work(Wife, Relationship.Wife, I));
-    }
-    public void append4(Humanking Children, Humanking I) {
-        tree.add(new Work(Children, Relationship.Children, I));
-    }
-}
-
-class Research {
-    ArrayList<Work> tree;
-
-    public Research(FamilyTree3 pd) {
-        tree = pd.getData();
-    }
-
-    public ArrayList<Humanking> spend(Family p, Relationship re) {
-        var result = new ArrayList<Humanking>();
-
-        for (Work t : tree) {
-            if (t.f1.getName() == p.getName() && t.re == re) {
-                result.add(t.f2);
+            @Override
+            public ArrayList<Humanking> spend(Family p, Relationship re) {
+                var result = new ArrayList<Humanking>();
+                for (Family person:SearchWorkOfTree(p, Relationship.Parents))
+                {
+                    result.addAll(SearchWorkOfTree(person, Relationship.Parents));
+                }
+                return result;
             }
         }
-        return result;
+
+
+//        System.out.println(new Research(gt).spend(George, Relationship.Wife));
+        System.out.println(" Relationship" + new NEWParents(gt).spend(Vera));
+//        System.out.println(new Research(gt).spend(George, Relationship.Relatives));
+//        System.out.println(new Research(gt).spend(George, Relationship.RelativesInLaw));
+//        System.out.println(new Research(gt).spend(George, Relationship.Children));
     }
 }
-
-class Printer {
-    //
-}
-
